@@ -1,36 +1,28 @@
-
+# インストールした discord.py を読み込む
 import discord
 
+# 接続に必要なオブジェクトを生成
 client = discord.Client()
 
 
+# 起動時に動作する処理
 @client.event
 async def on_ready():
-    print("ready")
+    # 起動したらターミナルにログイン通知が表示される
+    print("discord bot started.")
 
 
+# メッセージ受信時に動作する処理
 @client.event
 async def on_message(message):
-    if message.author == client.user:
+    # メッセージ送信者がBotだった場合は無視する
+    if message.author.bot:
         return
-
-    if message.content.startswith("hello"):
-        await message.channel.send("Hello!")
-
-
-@client.event
-async def on_message(message):
-    if message.content == "/create":
-        ch = await message.channel.category.create_text_channel(name="ch")
-        await message.channel.send(ch.mention + " を作成しました。")
+    # 「/neko」と発言したら「にゃーん」が返る処理
+    if message.content == '/neko':
+        await message.channel.send('にゃーん')
 
 
-@client.event
-async def on_message(message):
-    if message.content == "/servers":
-        await message.channel.send(len(client.guilds))
-        await message.channel.send(len(message.guild.members))
-        
 
 # load token
 print("Loading bottoken.txt")
@@ -41,5 +33,5 @@ print("Loaded bottoken.txt")
 
 print(token)
 
-# bot ready
+# Botの起動とDiscordサーバーへの接続
 client.run(token)
